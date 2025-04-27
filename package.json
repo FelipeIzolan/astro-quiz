@@ -9,9 +9,16 @@
     "src",
     "index.ts"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FelipeIzolan/astro-quiz"
+  },
   "keywords": [
+    "quiz",
     "astro-component"
   ],
+  "author": "Felipe Izolan",
+  "license": "MIT",
   "scripts": {},
   "devDependencies": {
     "astro": "^5.7.5"
