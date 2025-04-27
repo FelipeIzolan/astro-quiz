@@ -12,7 +12,7 @@ enum QuestionTypes {
 const uid = (function() {
   let counter = 0;
   return function() {
-    return `qq${counter++}`;
+    return `q${counter++}`;
   };
 })();
 

@@ -13,7 +13,7 @@ const { redColor, greenColor, buttonLabel } = Astro.props;
   data-green-color={greenColor ?? '#00c951'}
 >
   <slot/>
-  <div>
+  <div class="quiz-footer">
     <button>{buttonLabel ?? "Submit"}</button>
     <span></span>
   </div>
@@ -21,8 +21,8 @@ const { redColor, greenColor, buttonLabel } = Astro.props;
 <script>
 document.querySelectorAll(".quiz").forEach(quiz => {
   const questions = quiz.querySelectorAll(".quiz-question");
-  const button = quiz.querySelector("button");
-  const span = quiz.querySelector("span");
+  const button = quiz.querySelector(".quiz-footer button");
+  const span = quiz.querySelector(".quiz-footer span");
 
   button.addEventListener("click", () => {
     let count = 0;

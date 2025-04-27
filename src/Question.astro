@@ -7,9 +7,14 @@ interface Props {
   options?: string[];
 }
 
-const { SINGLE, MULTIPLE, BINARY, COMPLETE } = QuestionTypes;
-const { type, answer, options } = Astro.props;
 const name = uid();
+const { SINGLE, MULTIPLE, BINARY, COMPLETE } = QuestionTypes;
+var { type, answer, options } = Astro.props;
+
+if (type == BINARY) {
+  options = ['True', 'False'];
+  answer = +!answer;
+}
 ---
 <div data-type={type} data-answer={answer} class="quiz-question">
   <p><slot/></p>
@@ -17,24 +22,16 @@ const name = uid();
   type != COMPLETE &&
   <div>
     {
-      (type == SINGLE || type == MULTIPLE) &&
       options.map(
         (x, i) => 
         <div>
           <input
-            type={type == SINGLE ? "radio" : "checkbox"}
+            type={(type == SINGLE || type == BINARY) ? "radio" : "checkbox"}
             name={name}
             value={i}
           />
           <>{x}</>
         </div>
-      )
-    }
-    {
-      type == BINARY &&
-      (
-        <div><input type="radio" name={name} value="true" /><>True</></div>  
-        <div><input type="radio" name={name} value="false" /><>False</></div>
       )
     }
   </div>
