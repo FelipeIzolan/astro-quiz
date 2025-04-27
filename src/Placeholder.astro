@@ -1,0 +1,12 @@
+---
+interface Props {
+  answer?: string;
+}
+
+var answer = Astro.props.answer;
+var length = answer ? answer.length : 5;
+---
+<input 
+  type="text" 
+  style=`width:${length}em`
+/>

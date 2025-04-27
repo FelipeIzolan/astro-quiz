@@ -1,0 +1,42 @@
+---
+import { uid, QuestionTypes } from "../";
+
+interface Props {
+  type: QuestionTypes;
+  answer: number | boolean | string[] | number[];
+  options?: string[];
+}
+
+const { SINGLE, MULTIPLE, BINARY, COMPLETE } = QuestionTypes;
+const { type, answer, options } = Astro.props;
+const name = uid();
+---
+<div data-type={type} data-answer={answer} class="quiz-question">
+  <p><slot/></p>
+  { 
+  type != COMPLETE &&
+  <div>
+    {
+      (type == SINGLE || type == MULTIPLE) &&
+      options.map(
+        (x, i) => 
+        <div>
+          <input
+            type={type == SINGLE ? "radio" : "checkbox"}
+            name={name}
+            value={i}
+          />
+          <>{x}</>
+        </div>
+      )
+    }
+    {
+      type == BINARY &&
+      (
+        <div><input type="radio" name={name} value="true" /><>True</></div>  
+        <div><input type="radio" name={name} value="false" /><>False</></div>
+      )
+    }
+  </div>
+  }
+</div>

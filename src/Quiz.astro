@@ -1,0 +1,44 @@
+---
+interface Props {
+  redColor?: string;
+  greenColor?: string;
+  buttonLabel?: string; 
+}
+
+const { redColor, greenColor, buttonLabel } = Astro.props;
+---
+<div 
+  class="quiz" 
+  data-red-color={redColor ?? '#fb2c36'} 
+  data-green-color={greenColor ?? '#00c951'}
+>
+  <slot/>
+  <div>
+    <button>{buttonLabel ?? "Submit"}</button>
+    <span></span>
+  </div>
+</div>
+<script>
+document.querySelectorAll(".quiz").forEach(quiz => {
+  const questions = quiz.querySelectorAll(".quiz-question");
+  const button = quiz.querySelector("button");
+  const span = quiz.querySelector("span");
+
+  button.addEventListener("click", () => {
+    let count = 0;
+
+    questions.forEach(question => {
+      const { type, answer } = question.dataset;
+      const selector = type == "3" ? "[type=text]" : ":checked";
+      const inputs = question.querySelectorAll(`input${selector}`);
+      const userAnswer = Array.from(inputs).map(input => input.value).join(",");
+      const isCorrect = answer == userAnswer;
+      
+      count += isCorrect ? 1 : 0;
+      question.children[0].style.color = isCorrect ? quiz.dataset.greenColor : quiz.dataset.redColor;
+    });
+
+    span.textContent = `⭐ ${count}/${questions.length} - Your score!`;
+  });
+});
+</script>
