@@ -3,37 +3,50 @@ import { uid, QuestionTypes } from "../";
 
 interface Props {
   type: QuestionTypes;
-  answer: number | boolean | string[] | number[];
   options?: string[];
+  answer: any;
 }
 
 const name = uid();
-const { SINGLE, MULTIPLE, BINARY, COMPLETE } = QuestionTypes;
+const { BINARY, COMPLETE, INPUT } = QuestionTypes;
 var { type, answer, options } = Astro.props;
 
 if (type == BINARY) {
   options = ['True', 'False'];
   answer = +!answer;
 }
+
+if (type >= COMPLETE)
+  answer = answer.toString()
+               .normalize('NFD')
+               .replace(/[\u0300-\u036f]/g, "")
+               .toLowerCase()
+               .trim()
 ---
 <div data-type={type} data-answer={answer} class="quiz-question">
   <p><slot/></p>
-  { 
-  type != COMPLETE &&
   <div>
     {
-      options.map(
-        (x, i) => 
-        <div>
-          <input
-            type={(type == SINGLE || type == BINARY) ? "radio" : "checkbox"}
-            name={name}
-            value={i}
-          />
-          <>{x}</>
-        </div>
-      )
+    type < COMPLETE &&
+    options.map(
+      (x, i) => 
+      <div>
+        <input
+          type={type <= BINARY ? "radio" : "checkbox"}
+          name={name}
+          value={i}
+        />
+        <>{x}</>
+      </div>
+    )
+    }
+    {
+    type == INPUT && 
+    <input 
+      type='text'
+      name={name}
+      placeholder={'Enter your answer'}
+    />
     }
   </div>
-  }
 </div>

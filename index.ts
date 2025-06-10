@@ -4,16 +4,15 @@ import Placeholder from "./src/Placeholder.astro";
 
 enum QuestionTypes {
   SINGLE,
-  MULTIPLE,
   BINARY,
-  COMPLETE
+  MULTIPLE,
+  COMPLETE,
+  INPUT,
 }
 
-const uid = (function() {
+const uid = (() => {
   let counter = 0;
-  return function() {
-    return `q${counter++}`;
-  };
+  return () => `q${counter++}`;
 })();
 
 export {
@@ -21,5 +20,5 @@ export {
   Question,
   Placeholder,
   QuestionTypes,
-  uid // <- generates unique names for <input>
+  uid
 };

@@ -2,43 +2,54 @@
 interface Props {
   redColor?: string;
   greenColor?: string;
-  buttonLabel?: string; 
+  buttonLabel?: string;
 }
 
-const { redColor, greenColor, buttonLabel } = Astro.props;
+const { 
+  redColor = '#fb2c36', 
+  greenColor = '#089000', 
+  buttonLabel = 'Submit' 
+} = Astro.props;
 ---
-<div 
-  class="quiz" 
-  data-red-color={redColor ?? '#fb2c36'} 
-  data-green-color={greenColor ?? '#00c951'}
+<section 
+  class="quiz"
+  data-red={redColor}
+  data-green={greenColor}
 >
   <slot/>
-  <div class="quiz-footer">
-    <button>{buttonLabel ?? "Submit"}</button>
-    <span></span>
-  </div>
-</div>
+  <footer>
+    <button aria-label="Submit Quiz">{buttonLabel}</button>
+    <output aria-live="polite"></output>
+  </footer>
+</section>
 <script>
 document.querySelectorAll(".quiz").forEach(quiz => {
   const questions = quiz.querySelectorAll(".quiz-question");
-  const button = quiz.querySelector(".quiz-footer button");
-  const span = quiz.querySelector(".quiz-footer span");
+  const button = quiz.querySelector("footer button");
+  const output = quiz.querySelector("footer output");
 
   button.addEventListener("click", () => {
     let count = 0;
 
     questions.forEach(question => {
-      const { type, answer } = question.dataset;
-      const selector = type == "3" ? "[type=text]" : ":checked";
-      const inputs = question.querySelectorAll(`input${selector}`);
-      const userAnswer = Array.from(inputs).map(input => input.value).join(",");
-      const isCorrect = answer == userAnswer;
+      let { type, answer } = question.dataset;
+      let answers = question.querySelectorAll(`input${type > 2 ? "[type=text]" : ":checked"}`);
+      let userAnswer = Array.from(answers).map(input => input.value).join();
+
+      if (type > 2)
+        userAnswer = userAnswer.normalize('NFD')
+                               .replace(/[\u0300-\u036f]/g, "")
+                               .toLowerCase()
+                               .trim()
+
+      let p = question.children[0];
+      let ok = answer == userAnswer;
       
-      count += isCorrect ? 1 : 0;
-      question.children[0].style.color = isCorrect ? quiz.dataset.greenColor : quiz.dataset.redColor;
+      p.style.color = quiz.dataset[ok ? 'green' : 'red'];
+      count += ok;
     });
 
-    span.textContent = `⭐ ${count}/${questions.length} - Your score!`;
+    output.textContent = `⭐ ${count}/${questions.length} - Your Score!`;
   });
 });
 </script>

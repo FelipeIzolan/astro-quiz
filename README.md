@@ -24,57 +24,10 @@ import { Quiz, Question, Placeholder, QuestionTypes } from 'astro-quiz';
   <Question type={QuestionTypes.COMPLETE} answer={['brown', 'lazy']}>
     4. The quick <Placeholder answer={'brown'}/> fox jumps over the <Placeholder/> dog.
   </Question>
+  <Question type={QuestionTypes.INPUT} answer={'astro-quiz'}>
+    5. What is the best AstroJS library for creating quizzes? 
+  </Question>
 </Quiz>
-```
-
-## 📄 Documentation
-
-### Quiz
-
-```tsx
-// Usage:
-<Quiz>
-<!--<Question>'s here-->
-</Quiz>
-
-// Props:
-redColor?: string
-greenColor?: string
-buttonLabel?: string
-```
-
-### Question
-
-```tsx
-// Usage:
-<Question type={QuestionType} answer={QuestionAnswer}>
-  1. Your question here
-</Question>
-
-// Props:
-type: QuestionTypes;
-answer: number | boolean | string[] | number[];
-options?: string[]; // required in SINGLE and MULTIPLE type.
-```
-
-#### Answer
-
-- **SINGLE**: must be a number corresponding to the index of the correct answer.
-- **MULTIPLE**: must be an array of numbers corresponding to the indixes of the correct answers.
-- **BINARY**: must be true or false.
-- **COMPLETE**:  must be an array of strings corresponding to the correct answers.
-
-
-### Placeholder
-
-```tsx
-// Usage:
-<Placeholder
-  answer={'Used for input width calculation'}
-/>
-
-// Props:
-answer?: string;
 ```
 
 ## 📜 License
